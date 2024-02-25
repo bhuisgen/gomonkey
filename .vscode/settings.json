@@ -1,0 +1,8 @@
+{
+  "C_Cpp.clang_format_style": "Google",
+  "go.testFlags": [
+    "-race",
+    "-short"
+  ],
+  "go.testTimeout": "60s"
+}

@@ -1,0 +1,11 @@
+--- js/public/experimental/JSStencil.h.orig     2024-03-11 15:32:01.915428406 +0000
++++ js/public/experimental/JSStencil.h  2024-03-11 15:34:10.935368650 +0000
+@@ -57,7 +57,7 @@
+ //
+ // Off-thread APIs can allocate this instance off main thread, and pass it back
+ // to the main thread, in order to reduce the main thread allocation.
+-struct InstantiationStorage {
++struct JS_PUBLIC_API InstantiationStorage {
+  private:
+   // Owned CompilationGCOutput.
+   //
