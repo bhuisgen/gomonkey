@@ -1,0 +1,7 @@
+/_obj
+/deps/lib/*/debug
+/deps/lib/*/release/bin
+/deps/lib/*/release/include
+/deps/lib/*/release/lib/*.ajs
+/deps/lib/*/release/lib/*.orig
+/deps/lib/*/release/lib/pkgconfig/

@@ -1,0 +1,26 @@
+linters:
+  disable-all: true
+  enable:
+    # defaults
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    # bugs
+    - bodyclose
+    - gosec
+    # performance
+    - noctx
+    - perfsprint
+    - prealloc
+    # style
+    - errname
+    - sloglint
+    - wrapcheck
+  fast: true
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
