@@ -1,5 +1,7 @@
 # GoMonkey
 
+[![GitHub Release](https://img.shields.io/github/v/release/bhuisgen/gomonkey)](https://github.com/bhuisgen/gomonkey/releases)
+[![Go Report Card](https://goreportcard.com/badge/github.com/bhuisgen/gomonkey)](https://goreportcard.com/report/github.com/bhuisgen/gomonkey)
 [![Go Reference](https://pkg.go.dev/badge/github.com/bhuisgen/gomonkey.svg)](https://pkg.go.dev/github.com/bhuisgen/gomonkey)
 
 Go bindings to Mozilla Javascript Engine [SpiderMonkey](https://spidermonkey.dev).
