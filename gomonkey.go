@@ -2,6 +2,7 @@ package gomonkey
 
 // #cgo CXXFLAGS: -std=c++17 -isystem ${SRCDIR}/deps/include/mozjs-115 -Wall -Wextra -Wno-mismatched-tags -DCGO
 // #cgo LDFLAGS: -lmozjs-115
+// #cgo darwin,arm64 LDFLAGS: -L${SRCDIR}/deps/lib/darwin_arm64/release/lib
 // #cgo freebsd,amd64 LDFLAGS: -L${SRCDIR}/deps/lib/freebsd_amd64/release/lib
 // #cgo linux,amd64 LDFLAGS: -L${SRCDIR}/deps/lib/linux_amd64/release/lib
 // #cgo netbsd,amd64 LDFLAGS: -L${SRCDIR}/deps/lib/netbsd_amd64/release/lib

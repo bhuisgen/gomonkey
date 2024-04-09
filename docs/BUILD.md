@@ -15,13 +15,13 @@ Install Rust:
 ```bash
 $ curl https://sh.rustup.rs -sSf | sh
 $ source $HOME/.cargo/env
-$ rustc -v
+$ rustc --version
 ```
 
 Install build dependencies:
 
 ```bash
-$ sudo apt install libc++-dev libffi zlib1g
+$ sudo apt install libc++-dev libffi-dev zlib1g-dev
 ```
 
 Install debug dependencies:
@@ -33,11 +33,11 @@ $ sudo ln -s /usr/bin/llvm-objdump-16 /usr/local/bin/llvm-objdump
 
 ## Build
 
-Download and extract the latest [source](https://ftp.mozilla.org/pub/firefox/releases/115.1.0esr/source/) of Mozilla Firefox ESR in your working directory.
+Download and extract the latest [source](https://ftp.mozilla.org/pub/firefox/releases/115.9.1esr/source/) of Mozilla Firefox ESR in your working directory.
 
 ```bash
-$ tar xf firefox-115.1.0.tar.xz
-$ cd firefox-115.1.0
+$ tar xf firefox-115.9.1.tar.xz
+$ cd firefox-115.9.1
 ```
 
 First apply all patches present in the **patch** directory if any:

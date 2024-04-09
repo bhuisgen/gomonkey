@@ -40,7 +40,7 @@ func main() {
 
 	log.Printf("Version: %s\n", gomonkey.Version())
 
-	if gomonkey.Version() != "115.1" {
+	if gomonkey.Version() != "115.9" {
 		log.Print("Invalid version, aborting")
 		os.Exit(2)
 	}
@@ -145,6 +145,9 @@ func smoke(count int) {
 }
 
 func smokeTestContext() {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		log.Fatal(err)
@@ -153,6 +156,9 @@ func smokeTestContext() {
 }
 
 func smokeTestValue() {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		log.Fatal(err)
@@ -209,6 +215,9 @@ func smokeTestValue() {
 }
 
 func smokeTestObject() {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		log.Fatal(err)
@@ -340,6 +349,9 @@ func smokeTestObject() {
 }
 
 func smokeTestEvaluate(executions int) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		log.Fatal(err)
@@ -363,6 +375,9 @@ func smokeTestEvaluate(executions int) {
 }
 
 func smokeTestEvaluateFunction(executions int) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		log.Fatal(err)
@@ -405,6 +420,9 @@ func smokeTestEvaluateFunction(executions int) {
 }
 
 func smokeTestCallFunctionName(executions int) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		log.Fatal(err)
@@ -457,6 +475,9 @@ func smokeTestCallFunctionName(executions int) {
 }
 
 func smokeTestCallFunctionValue(executions int) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		log.Fatal(err)
@@ -509,6 +530,9 @@ func smokeTestCallFunctionValue(executions int) {
 }
 
 func smokeTestCallMethod(executions int) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		log.Fatal(err)
@@ -564,6 +588,9 @@ func smokeTestCallMethod(executions int) {
 }
 
 func smokeTestExecuteScript(executions int) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		log.Fatal(err)
