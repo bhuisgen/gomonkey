@@ -145,6 +145,7 @@ ResultValue NewValueNumber(ContextPtr ctx, double d);
 ResultValue NewValueInt32(ContextPtr ctx, int32_t i);
 void ReleaseValue(ValuePtr value);
 ResultString ToString(ValuePtr value);
+bool ValueIs(ValuePtr value1, ValuePtr value2);
 bool ValueIsUndefined(ValuePtr value);
 bool ValueIsNull(ValuePtr value);
 bool ValueIsNullOrUndefined(ValuePtr value);
@@ -176,6 +177,27 @@ ResultValue NewFunction(ContextPtr ctx, char* name);
 
 ResultValue NewArrayObject(ContextPtr ctx, int argc, ValuePtr* argv);
 ResultUInt32 GetArrayObjectLength(ValuePtr array);
+
+ResultValue NewMapObject(ContextPtr ctx);
+ResultUInt32 MapObjectSize(ValuePtr map);
+ResultBool MapObjectHas(ValuePtr map, ValuePtr key);
+ResultValue MapObjectGet(ValuePtr map, ValuePtr key);
+Result MapObjectSet(ValuePtr map, ValuePtr key, ValuePtr val);
+ResultBool MapObjectDelete(ValuePtr map, ValuePtr key);
+Result MapObjectClear(ValuePtr map);
+ResultValue MapObjectKeys(ValuePtr map);
+ResultValue MapObjectValues(ValuePtr map);
+ResultValue MapObjectEntries(ValuePtr map);
+
+ResultValue NewSetObject(ContextPtr ctx);
+ResultUInt32 SetObjectSize(ValuePtr set);
+ResultBool SetObjectHas(ValuePtr set, ValuePtr key);
+Result SetObjectAdd(ValuePtr set, ValuePtr val);
+ResultBool SetObjectDelete(ValuePtr set, ValuePtr key);
+Result SetObjectClear(ValuePtr set);
+ResultValue SetObjectKeys(ValuePtr set);
+ResultValue SetObjectValues(ValuePtr set);
+ResultValue SetObjectEntries(ValuePtr set);
 
 ResultValue JSONParse(ContextPtr ctx, const char* data);
 ResultString JSONStringify(ContextPtr ctx, ValuePtr value);

@@ -115,6 +115,11 @@ func (v *Value) AsFunction() (*Function, error) {
 	return &Function{v}, nil
 }
 
+// Is checks if the JS value is the same.
+func (v *Value) Is(value *Value) bool {
+	return bool(C.ValueIs(v.ptr, value.ptr))
+}
+
 // IsUndefined checks if the JS value is undefined.
 func (v *Value) IsUndefined() bool {
 	return bool(C.ValueIsUndefined(v.ptr))

@@ -313,6 +313,23 @@ func TestValueAsFunction(t *testing.T) {
 	}
 }
 
+func TestValueIs(t *testing.T) {
+	ctx, err := gomonkey.NewContext()
+	if err != nil {
+		t.Fatal()
+	}
+	defer ctx.Destroy()
+	v, err := gomonkey.NewValueString(ctx, "test")
+	if err != nil {
+		t.Fatal()
+	}
+	defer v.Release()
+
+	if got := v.Is(v); got != true {
+		t.Errorf("v.Is() got %v, want %v", got, true)
+	}
+}
+
 func TestValueIsUndefined(t *testing.T) {
 	ctx, err := gomonkey.NewContext()
 	if err != nil {

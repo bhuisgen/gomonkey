@@ -5,6 +5,7 @@
 #include <js/Conversions.h>
 #include <js/Initialization.h>
 #include <js/JSON.h>
+#include <js/MapAndSet.h>
 #include <js/Object.h>
 #include <js/SourceText.h>
 
@@ -975,6 +976,10 @@ ResultString ToString(ValuePtr value) {
   return result;
 }
 
+bool ValueIs(ValuePtr value, ValuePtr other) {
+  return value->getJSValue() == other->getJSValue();
+}
+
 bool ValueIsUndefined(ValuePtr value) {
   return value->getJSValue().isUndefined();
 }
@@ -1422,6 +1427,578 @@ ResultUInt32 GetArrayObjectLength(ValuePtr array) {
 
   result.ok = true;
   result.value = length;
+  return result;
+}
+
+ResultValue NewMapObject(ContextPtr ctx) {
+  ResultValue result = {};
+
+  JS::RootedObject global(ctx->getJSContext(), ctx->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(ctx->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(ctx->getJSContext(), global);
+
+  JS::RootedObject obj(ctx->getJSContext(),
+                       JS::NewMapObject(ctx->getJSContext()));
+  JS::RootedValue val(ctx->getJSContext());
+  val.setObject(*obj);
+
+  Value *v = new Value(ctx, val);
+  if (!v) {
+    return result;
+  }
+
+  result.ok = true;
+  result.ptr = v;
+  return result;
+}
+
+ResultUInt32 MapObjectSize(ValuePtr map) {
+  ResultUInt32 result = {};
+
+  JS::RootedObject global(map->getContext()->getJSContext(),
+                          map->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(map->getContext()->getJSContext(), global);
+
+  JS::RootedObject mapObj(map->getContext()->getJSContext(),
+                          &map->getJSValue().toObject());
+  if (!mapObj) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+
+  uint32_t size = JS::MapSize(map->getContext()->getJSContext(), mapObj);
+
+  result.ok = true;
+  result.value = size;
+  return result;
+}
+
+ResultBool MapObjectHas(ValuePtr map, ValuePtr key) {
+  ResultBool result = {};
+
+  JS::RootedObject global(map->getContext()->getJSContext(),
+                          map->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(map->getContext()->getJSContext(), global);
+
+  JS::RootedObject mapObj(map->getContext()->getJSContext(),
+                          &map->getJSValue().toObject());
+  if (!mapObj) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+  JS::RootedValue keyVal(map->getContext()->getJSContext(), key->getJSValue());
+
+  bool found;
+  if (!JS::MapHas(map->getContext()->getJSContext(), mapObj, keyVal, &found)) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+
+  result.ok = true;
+  result.value = found;
+  return result;
+}
+
+ResultValue MapObjectGet(ValuePtr map, ValuePtr key) {
+  ResultValue result = {};
+
+  JS::RootedObject global(map->getContext()->getJSContext(),
+                          map->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(map->getContext()->getJSContext(), global);
+
+  JS::RootedObject mapObj(map->getContext()->getJSContext(),
+                          &map->getJSValue().toObject());
+  if (!mapObj) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+  JS::RootedValue keyVal(map->getContext()->getJSContext(), key->getJSValue());
+
+  JS::RootedValue val(map->getContext()->getJSContext());
+  if (!JS::MapGet(map->getContext()->getJSContext(), mapObj, keyVal, &val)) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+
+  Value *v = new Value(map->getContext(), val);
+  if (!v) {
+    return result;
+  }
+
+  result.ok = true;
+  result.ptr = v;
+  return result;
+}
+
+Result MapObjectSet(ValuePtr map, ValuePtr key, ValuePtr val) {
+  Result result = {};
+
+  JS::RootedObject global(map->getContext()->getJSContext(),
+                          map->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(map->getContext()->getJSContext(), global);
+
+  JS::RootedObject mapObj(map->getContext()->getJSContext(),
+                          &map->getJSValue().toObject());
+  if (!mapObj) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+  JS::RootedValue keyVal(map->getContext()->getJSContext(), key->getJSValue());
+  JS::RootedValue valVal(map->getContext()->getJSContext(), val->getJSValue());
+
+  if (!JS::MapSet(map->getContext()->getJSContext(), mapObj, keyVal, valVal)) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+
+  result.ok = true;
+  return result;
+}
+
+ResultBool MapObjectDelete(ValuePtr map, ValuePtr key) {
+  ResultBool result = {};
+
+  JS::RootedObject global(map->getContext()->getJSContext(),
+                          map->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(map->getContext()->getJSContext(), global);
+
+  JS::RootedObject mapObj(map->getContext()->getJSContext(),
+                          &map->getJSValue().toObject());
+  if (!mapObj) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+  JS::RootedValue keyVal(map->getContext()->getJSContext(), key->getJSValue());
+
+  bool found;
+  if (!JS::MapDelete(map->getContext()->getJSContext(), mapObj, keyVal,
+                     &found)) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+
+  result.ok = true;
+  result.value = found;
+  return result;
+}
+
+Result MapObjectClear(ValuePtr map) {
+  Result result = {};
+
+  JS::RootedObject global(map->getContext()->getJSContext(),
+                          map->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(map->getContext()->getJSContext(), global);
+
+  JS::RootedObject mapObj(map->getContext()->getJSContext(),
+                          &map->getJSValue().toObject());
+  if (!mapObj) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+
+  if (!JS::MapClear(map->getContext()->getJSContext(), mapObj)) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+
+  result.ok = true;
+  return result;
+}
+
+ResultValue MapObjectKeys(ValuePtr map) {
+  ResultValue result = {};
+
+  JS::RootedObject global(map->getContext()->getJSContext(),
+                          map->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(map->getContext()->getJSContext(), global);
+
+  JS::RootedObject mapObj(map->getContext()->getJSContext(),
+                          &map->getJSValue().toObject());
+  if (!mapObj) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+
+  JS::RootedValue val(map->getContext()->getJSContext());
+  if (!JS::MapKeys(map->getContext()->getJSContext(), mapObj, &val)) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+
+  Value *v = new Value(map->getContext(), val);
+  if (!v) {
+    return result;
+  }
+
+  result.ok = true;
+  result.ptr = v;
+  return result;
+}
+
+ResultValue MapObjectValues(ValuePtr map) {
+  ResultValue result = {};
+
+  JS::RootedObject global(map->getContext()->getJSContext(),
+                          map->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(map->getContext()->getJSContext(), global);
+
+  JS::RootedObject mapObj(map->getContext()->getJSContext(),
+                          &map->getJSValue().toObject());
+  if (!mapObj) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+
+  JS::RootedValue val(map->getContext()->getJSContext());
+  if (!JS::MapValues(map->getContext()->getJSContext(), mapObj, &val)) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+
+  Value *v = new Value(map->getContext(), val);
+  if (!v) {
+    return result;
+  }
+
+  result.ok = true;
+  result.ptr = v;
+  return result;
+}
+
+ResultValue MapObjectEntries(ValuePtr map) {
+  ResultValue result = {};
+
+  JS::RootedObject global(map->getContext()->getJSContext(),
+                          map->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(map->getContext()->getJSContext(), global);
+
+  JS::RootedObject mapObj(map->getContext()->getJSContext(),
+                          &map->getJSValue().toObject());
+  if (!mapObj) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+
+  JS::RootedValue val(map->getContext()->getJSContext());
+  if (!JS::MapEntries(map->getContext()->getJSContext(), mapObj, &val)) {
+    result.err = GetError(map->getContext()->getJSContext());
+    return result;
+  }
+
+  Value *v = new Value(map->getContext(), val);
+  if (!v) {
+    return result;
+  }
+
+  result.ok = true;
+  result.ptr = v;
+  return result;
+}
+
+ResultValue NewSetObject(ContextPtr ctx) {
+  ResultValue result = {};
+
+  JS::RootedObject global(ctx->getJSContext(), ctx->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(ctx->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(ctx->getJSContext(), global);
+
+  JS::RootedObject obj(ctx->getJSContext(),
+                       JS::NewSetObject(ctx->getJSContext()));
+  JS::RootedValue val(ctx->getJSContext());
+  val.setObject(*obj);
+
+  Value *v = new Value(ctx, val);
+  if (!v) {
+    return result;
+  }
+
+  result.ok = true;
+  result.ptr = v;
+  return result;
+}
+
+ResultUInt32 SetObjectSize(ValuePtr set) {
+  ResultUInt32 result = {};
+
+  JS::RootedObject global(set->getContext()->getJSContext(),
+                          set->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(set->getContext()->getJSContext(), global);
+
+  JS::RootedObject setObj(set->getContext()->getJSContext(),
+                          &set->getJSValue().toObject());
+  if (!setObj) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+
+  uint32_t size = JS::SetSize(set->getContext()->getJSContext(), setObj);
+
+  result.ok = true;
+  result.value = size;
+  return result;
+}
+
+ResultBool SetObjectHas(ValuePtr set, ValuePtr key) {
+  ResultBool result = {};
+
+  JS::RootedObject global(set->getContext()->getJSContext(),
+                          set->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(set->getContext()->getJSContext(), global);
+
+  JS::RootedObject setObj(set->getContext()->getJSContext(),
+                          &set->getJSValue().toObject());
+  if (!setObj) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+  JS::RootedValue keyVal(set->getContext()->getJSContext(), key->getJSValue());
+
+  bool found;
+  if (!JS::SetHas(set->getContext()->getJSContext(), setObj, keyVal, &found)) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+
+  result.ok = true;
+  result.value = found;
+  return result;
+}
+
+Result SetObjectAdd(ValuePtr set, ValuePtr val) {
+  Result result = {};
+
+  JS::RootedObject global(set->getContext()->getJSContext(),
+                          set->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(set->getContext()->getJSContext(), global);
+
+  JS::RootedObject mapObj(set->getContext()->getJSContext(),
+                          &set->getJSValue().toObject());
+  if (!mapObj) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+  JS::RootedValue valVal(set->getContext()->getJSContext(), val->getJSValue());
+
+  if (!JS::SetAdd(set->getContext()->getJSContext(), mapObj, valVal)) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+
+  result.ok = true;
+  return result;
+}
+
+ResultBool SetObjectDelete(ValuePtr set, ValuePtr key) {
+  ResultBool result = {};
+
+  JS::RootedObject global(set->getContext()->getJSContext(),
+                          set->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(set->getContext()->getJSContext(), global);
+
+  JS::RootedObject setObj(set->getContext()->getJSContext(),
+                          &set->getJSValue().toObject());
+  if (!setObj) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+  JS::RootedValue keyVal(set->getContext()->getJSContext(), key->getJSValue());
+
+  bool found;
+  if (!JS::SetDelete(set->getContext()->getJSContext(), setObj, keyVal,
+                     &found)) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+
+  result.ok = true;
+  result.value = found;
+  return result;
+}
+
+Result SetObjectClear(ValuePtr set) {
+  Result result = {};
+
+  JS::RootedObject global(set->getContext()->getJSContext(),
+                          set->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(set->getContext()->getJSContext(), global);
+
+  JS::RootedObject setObj(set->getContext()->getJSContext(),
+                          &set->getJSValue().toObject());
+  if (!setObj) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+
+  if (!JS::SetClear(set->getContext()->getJSContext(), setObj)) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+
+  result.ok = true;
+  return result;
+}
+
+ResultValue SetObjectKeys(ValuePtr set) {
+  ResultValue result = {};
+
+  JS::RootedObject global(set->getContext()->getJSContext(),
+                          set->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(set->getContext()->getJSContext(), global);
+
+  JS::RootedObject setObj(set->getContext()->getJSContext(),
+                          &set->getJSValue().toObject());
+  if (!setObj) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+
+  JS::RootedValue val(set->getContext()->getJSContext());
+  if (!JS::SetKeys(set->getContext()->getJSContext(), setObj, &val)) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+
+  Value *v = new Value(set->getContext(), val);
+  if (!v) {
+    return result;
+  }
+
+  result.ok = true;
+  result.ptr = v;
+  return result;
+}
+
+ResultValue SetObjectValues(ValuePtr set) {
+  ResultValue result = {};
+
+  JS::RootedObject global(set->getContext()->getJSContext(),
+                          set->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(set->getContext()->getJSContext(), global);
+
+  JS::RootedObject setObj(set->getContext()->getJSContext(),
+                          &set->getJSValue().toObject());
+  if (!setObj) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+
+  JS::RootedValue val(set->getContext()->getJSContext());
+  if (!JS::SetValues(set->getContext()->getJSContext(), setObj, &val)) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+
+  Value *v = new Value(set->getContext(), val);
+  if (!v) {
+    return result;
+  }
+
+  result.ok = true;
+  result.ptr = v;
+  return result;
+}
+
+ResultValue SetObjectEntries(ValuePtr set) {
+  ResultValue result = {};
+
+  JS::RootedObject global(set->getContext()->getJSContext(),
+                          set->getContext()->getGlobalJSObject());
+  if (!global) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+  JSAutoRealm ar(set->getContext()->getJSContext(), global);
+
+  JS::RootedObject setObj(set->getContext()->getJSContext(),
+                          &set->getJSValue().toObject());
+  if (!setObj) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+
+  JS::RootedValue val(set->getContext()->getJSContext());
+  if (!JS::SetEntries(set->getContext()->getJSContext(), setObj, &val)) {
+    result.err = GetError(set->getContext()->getJSContext());
+    return result;
+  }
+
+  Value *v = new Value(set->getContext(), val);
+  if (!v) {
+    return result;
+  }
+
+  result.ok = true;
+  result.ptr = v;
   return result;
 }
 
