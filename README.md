@@ -6,6 +6,13 @@
 
 Go bindings to Mozilla Javascript Engine [SpiderMonkey](https://spidermonkey.dev).
 
+| OS      | CPU   | Version    |
+|---------|-------|------------|
+| Darwin  | arm64 | macOS 14   |
+| FreeBSD | amd64 | FreeBSD 14 |
+| Linux   | amd64 | Debian 12  |
+| NetBSD  | amd64 | NetBSD 9   |
+| OpenBSD | amd64 | OpenBSD 7  |
 
 ## Usage
 
@@ -461,34 +468,51 @@ wg.Wait()
 
 The shared library `libmozjs-115.so` is required for compilation and execution.
 
-Prebuilt libraries are available for different OS/arch in the [deps/lib](./deps/lib) directory:
+Prebuilt libraries are available in the [deps/lib](./deps/lib) directory. If your system is not available, you have to build the library following the instructions in the [build](./docs/BUILD.md) document.
 
-| OS      | CPU   | Version    |
-|---------|-------|------------|
-| FreeBSD | amd64 | FreeBSD 14 |
-| Linux   | amd64 | Debian 12  |
-| NetBSD  | amd64 | NetBSD 9   |
-| OpenBSD | amd64 | OpenBSD 7  |
+**Darwin:**
 
-If your system is not available, you have to build the library. Please follow the instructions in the [build](./docs/BUILD.md) document.
+Copy the library in the same directory as the binary file:
 
-Copy the library in your system library path :
+    $ cp deps/lib/freebsd_amd64/release/lib/libmozjs-115.so .
+
+Check the current reference to the library from the binary file:
+
+    $ otool -l ./binary | grep libmozjs
+
+Update the reference to the new libary path:
+
+    $ install_name_tool -change /Users/boris/Projects/gomonkey/deps/lib/darwin_arm64/release/lib/libmozjs-115.dylib @rpath/libmozjs-115.dylib ./binary
 
 **FreeBSD:**
 
+Copy the library in your system library path:
+
     $ sudo cp deps/lib/freebsd_amd64/release/lib/libmozjs-115.so /usr/lib/
+
+To troubleshoot any missing system libraries, use the `ldd` command.
 
 **Linux:**
 
+Copy the library in your system library path:
+
     $ sudo cp deps/lib/linux_amd64/release/lib/libmozjs-115.so /usr/lib/x86_64-linux-gnu/
+
+To troubleshoot any missing system libraries, use the `ldd` command.
 
 **NetBSD:**
 
+Copy the library in your system library path:
+
     $ sudo cp deps/lib/netbsd_amd64/release/lib/libmozjs-115.so /usr/lib/
+
+To troubleshoot any missing system libraries, use the `ldd` command.
 
 **OpenBSD:**
 
-    $ sudo cp deps/lib/openbsd_amd64/release/lib/libmozjs-115.so /usr/lib/
+Copy the library in your system library path:
+
+    $ sudo cp deps/lib/openbsd_amd64/release/lib/libmozjs-115.so.1.0 /usr/lib/
 
 To troubleshoot any missing system libraries, use the `ldd` command.
 
