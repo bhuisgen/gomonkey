@@ -3,6 +3,7 @@ package gomonkey_test_error
 import (
 	"fmt"
 	"os"
+	"runtime"
 	"testing"
 
 	"github.com/bhuisgen/gomonkey"
@@ -16,6 +17,9 @@ func TestMain(m *testing.M) {
 }
 
 func TestError(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()

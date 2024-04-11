@@ -2,6 +2,7 @@ package gomonkey_test_map
 
 import (
 	"os"
+	"runtime"
 	"testing"
 
 	"github.com/bhuisgen/gomonkey"
@@ -15,6 +16,9 @@ func TestMain(m *testing.M) {
 }
 
 func TestNewMapObject(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -29,6 +33,9 @@ func TestNewMapObject(t *testing.T) {
 }
 
 func TestMapObjectRelease(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -43,6 +50,9 @@ func TestMapObjectRelease(t *testing.T) {
 }
 
 func TestMapObjectSize(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -76,6 +86,9 @@ func TestMapObjectSize(t *testing.T) {
 }
 
 func TestMapObjectHas(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -96,7 +109,6 @@ func TestMapObjectHas(t *testing.T) {
 		t.Fatal()
 	}
 	defer value.Release()
-
 	if err := object.Set(key, value); err != nil {
 		t.Fatal()
 	}
@@ -106,6 +118,9 @@ func TestMapObjectHas(t *testing.T) {
 	}
 }
 func TestMapObjectGet(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -131,16 +146,20 @@ func TestMapObjectGet(t *testing.T) {
 		t.Fatal()
 	}
 
-	got, err := object.Get(key)
+	v, err := object.Get(key)
 	if err != nil {
 		t.Errorf("o.Get() error = %v, want %v", err, nil)
 	}
-	if !got.Is(value) {
-		t.Errorf("o.Get() got %v, want %v", got, value)
+	defer v.Release()
+	if got := v.Is(value); got != true {
+		t.Errorf("v.Is() got %v, want %v", got, true)
 	}
 }
 
 func TestMapObjectSet(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -165,8 +184,19 @@ func TestMapObjectSet(t *testing.T) {
 	if err := object.Set(key, value); err != nil {
 		t.Errorf("o.Set() error = %v, want %v", err, nil)
 	}
+	v, err := object.Get(key)
+	if err != nil {
+		t.Errorf("o.Get() err = %v, want %v", err, nil)
+	}
+	defer v.Release()
+	if got := v.Is(value); got != true {
+		t.Errorf("v.Is() got %v, want %v", got, true)
+	}
 }
 func TestMapObjectDelete(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -194,9 +224,15 @@ func TestMapObjectDelete(t *testing.T) {
 	if err := object.Delete(key); err != nil {
 		t.Errorf("o.Delete() error = %v, want %v", err, nil)
 	}
+	if got := object.Has(key); got != false {
+		t.Errorf("o.Has() got %v, want %v", got, false)
+	}
 }
 
 func TestMapObjectClear(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -227,6 +263,9 @@ func TestMapObjectClear(t *testing.T) {
 }
 
 func TestMapObjectKeys(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -259,6 +298,9 @@ func TestMapObjectKeys(t *testing.T) {
 }
 
 func TestMapObjectValues(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -291,6 +333,9 @@ func TestMapObjectValues(t *testing.T) {
 }
 
 func TestMapObjectEntries(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -323,19 +368,22 @@ func TestMapObjectEntries(t *testing.T) {
 }
 
 func TestMapObjectAsValue(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
 	}
 	defer ctx.Destroy()
-	v, err := gomonkey.NewMapObject(ctx)
+	object, err := gomonkey.NewMapObject(ctx)
 	if err != nil {
 		t.Fatal()
 	}
-	defer v.Release()
+	defer object.Release()
 
-	val := v.AsValue()
-	if val == nil {
-		t.Errorf("o.AsValue() = %v", val)
+	v := object.AsValue()
+	if v == nil {
+		t.Errorf("o.AsValue() = %v", v)
 	}
 }

@@ -2,6 +2,7 @@ package gomonkey_test_function
 
 import (
 	"os"
+	"runtime"
 	"testing"
 
 	"github.com/bhuisgen/gomonkey"
@@ -15,6 +16,9 @@ func TestMain(m *testing.M) {
 }
 
 func TestNewFunction(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -31,6 +35,9 @@ func TestNewFunction(t *testing.T) {
 }
 
 func TestFunctionRelease(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -47,6 +54,9 @@ func TestFunctionRelease(t *testing.T) {
 }
 
 func TestFunctionCall(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -95,6 +105,9 @@ func TestFunctionCall(t *testing.T) {
 }
 
 func TestFunctionAsValue(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()

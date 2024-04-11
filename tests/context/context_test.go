@@ -17,6 +17,9 @@ func TestMain(m *testing.M) {
 }
 
 func TestNewContext(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Errorf("NewContext() err = %v, want %v", err, nil)
@@ -28,6 +31,9 @@ func TestNewContext(t *testing.T) {
 }
 
 func TestNewContext_WithOptions(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext(
 		gomonkey.WithHeapMaxBytes(32*1024*1024),
 		gomonkey.WithNativeStackSize(1024*1024),
@@ -45,6 +51,9 @@ func TestNewContext_WithOptions(t *testing.T) {
 }
 
 func TestContextDestroy(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -92,6 +101,9 @@ func TestContextRequestInterrupt(t *testing.T) {
 }
 
 func TestContextGlobal(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -106,6 +118,9 @@ func TestContextGlobal(t *testing.T) {
 }
 
 func TestContextDefineObject_Global(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -128,6 +143,9 @@ func TestContextDefineObject_Global(t *testing.T) {
 }
 
 func TestContextDefineObject_Object(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -150,6 +168,9 @@ func TestContextDefineObject_Object(t *testing.T) {
 }
 
 func TestContextDefineProperty_Global(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -175,6 +196,9 @@ func TestContextDefineProperty_Global(t *testing.T) {
 }
 
 func TestContextDefineProperty_Object(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -200,6 +224,9 @@ func TestContextDefineProperty_Object(t *testing.T) {
 }
 
 func TestContextDefineFunction_Global(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -233,6 +260,9 @@ func TestContextDefineFunction_Global(t *testing.T) {
 }
 
 func TestContextDefineFunction_Object(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -266,6 +296,9 @@ func TestContextDefineFunction_Object(t *testing.T) {
 }
 
 func TestContextDefineElement(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -291,6 +324,9 @@ func TestContextDefineElement(t *testing.T) {
 }
 
 func TestContextCallFunctionName_DefineFunction(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -344,6 +380,9 @@ func TestContextCallFunctionName_DefineFunction(t *testing.T) {
 }
 
 func TestContextCallFunctionName_NewFunction(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -395,6 +434,9 @@ func TestContextCallFunctionName_NewFunction(t *testing.T) {
 	}
 }
 func TestContextCallFunctionValue_DefineFunction(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -448,6 +490,9 @@ func TestContextCallFunctionValue_DefineFunction(t *testing.T) {
 }
 
 func TestContextCallFunctionValue_NewFunction(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -497,6 +542,9 @@ func TestContextCallFunctionValue_NewFunction(t *testing.T) {
 }
 
 func TestContextEvaluate(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -511,6 +559,9 @@ func TestContextEvaluate(t *testing.T) {
 }
 
 func TestContextCompileScript(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -525,6 +576,9 @@ func TestContextCompileScript(t *testing.T) {
 }
 
 func TestContextExecuteScript(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -547,6 +601,9 @@ func TestContextExecuteScript(t *testing.T) {
 }
 
 func TestContextExecuteScriptFromStencil(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	fc, err := gomonkey.NewFrontendContext()
 	if err != nil {
 		t.Fatal()
@@ -576,6 +633,9 @@ func TestContextExecuteScriptFromStencil(t *testing.T) {
 }
 
 func TestNewFrontendContext(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewFrontendContext()
 	if err != nil {
 		t.Errorf("NewFrontendContext() err = %v, want %v", err, nil)
@@ -587,6 +647,9 @@ func TestNewFrontendContext(t *testing.T) {
 }
 
 func TestNewFrontendContext_WithOptions(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewFrontendContext(
 		gomonkey.WithFrontendNativeStackSize(1024 * 1024),
 	)
@@ -600,6 +663,9 @@ func TestNewFrontendContext_WithOptions(t *testing.T) {
 }
 
 func TestFrontendContextDestroy(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewFrontendContext()
 	if err != nil {
 		t.Fatal()
@@ -608,6 +674,9 @@ func TestFrontendContextDestroy(t *testing.T) {
 }
 
 func TestFrontendContextCompileScript(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewFrontendContext()
 	if err != nil {
 		t.Fatal()

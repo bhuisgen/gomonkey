@@ -2,6 +2,7 @@ package gomonkey_test_set
 
 import (
 	"os"
+	"runtime"
 	"testing"
 
 	"github.com/bhuisgen/gomonkey"
@@ -15,6 +16,9 @@ func TestMain(m *testing.M) {
 }
 
 func TestNewSetObject(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -29,6 +33,9 @@ func TestNewSetObject(t *testing.T) {
 }
 
 func TestSetObjectRelease(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -43,6 +50,9 @@ func TestSetObjectRelease(t *testing.T) {
 }
 
 func TestSetObjectSize(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -71,6 +81,9 @@ func TestSetObjectSize(t *testing.T) {
 }
 
 func TestSetObjectHas(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -85,7 +98,6 @@ func TestSetObjectHas(t *testing.T) {
 		t.Fatal()
 	}
 	defer value.Release()
-
 	if err := object.Add(value); err != nil {
 		t.Fatal()
 	}
@@ -96,6 +108,9 @@ func TestSetObjectHas(t *testing.T) {
 }
 
 func TestSetObjectAdd(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -115,8 +130,15 @@ func TestSetObjectAdd(t *testing.T) {
 	if err := object.Add(value); err != nil {
 		t.Errorf("o.Add() error = %v, want %v", err, nil)
 	}
+	if got := object.Has(value); got != true {
+		t.Errorf("o.Has() got %v, want %v", got, true)
+	}
 }
+
 func TestSetObjectDelete(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -139,9 +161,15 @@ func TestSetObjectDelete(t *testing.T) {
 	if err := object.Delete(value); err != nil {
 		t.Errorf("o.Delete() error = %v, want %v", err, nil)
 	}
+	if got := object.Has(value); got != false {
+		t.Errorf("o.Has() got %v, want %v", got, false)
+	}
 }
 
 func TestSetObjectClear(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -167,6 +195,9 @@ func TestSetObjectClear(t *testing.T) {
 }
 
 func TestSetObjectKeys(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -194,6 +225,9 @@ func TestSetObjectKeys(t *testing.T) {
 }
 
 func TestSetObjectValues(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -221,6 +255,9 @@ func TestSetObjectValues(t *testing.T) {
 }
 
 func TestSetObjectEntries(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -248,19 +285,22 @@ func TestSetObjectEntries(t *testing.T) {
 }
 
 func TestSetObjectAsValue(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
 	}
 	defer ctx.Destroy()
-	v, err := gomonkey.NewSetObject(ctx)
+	object, err := gomonkey.NewSetObject(ctx)
 	if err != nil {
 		t.Fatal()
 	}
-	defer v.Release()
+	defer object.Release()
 
-	val := v.AsValue()
-	if val == nil {
-		t.Errorf("o.AsValue() = %v", val)
+	v := object.AsValue()
+	if v == nil {
+		t.Errorf("o.AsValue() = %v", v)
 	}
 }

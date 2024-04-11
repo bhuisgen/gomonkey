@@ -2,6 +2,7 @@ package gomonkey_test_json
 
 import (
 	"os"
+	"runtime"
 	"testing"
 
 	"github.com/bhuisgen/gomonkey"
@@ -15,6 +16,9 @@ func TestMain(m *testing.M) {
 }
 
 func TestJSONParse(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -40,6 +44,9 @@ func TestJSONParse(t *testing.T) {
 }
 
 func TestJSONStringify_Object(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -68,6 +75,9 @@ func TestJSONStringify_Object(t *testing.T) {
 }
 
 func TestJSONStringify_Value(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()

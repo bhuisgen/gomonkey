@@ -3,6 +3,7 @@ package gomonkey_test_object
 import (
 	"errors"
 	"os"
+	"runtime"
 	"testing"
 
 	"github.com/bhuisgen/gomonkey"
@@ -16,6 +17,9 @@ func TestMain(m *testing.M) {
 }
 
 func TestNewObject(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -30,6 +34,9 @@ func TestNewObject(t *testing.T) {
 }
 
 func TestObjectRelease(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -44,6 +51,9 @@ func TestObjectRelease(t *testing.T) {
 }
 
 func TestObjectHas(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -69,6 +79,9 @@ func TestObjectHas(t *testing.T) {
 }
 
 func TestObjectSet(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -88,9 +101,20 @@ func TestObjectSet(t *testing.T) {
 	if err := object.Set("test", value); err != nil {
 		t.Errorf("o.Set() err = %v, want %v", err, nil)
 	}
+	v, err := object.Get("test")
+	if err != nil {
+		t.Errorf("o.Get() err = %v, want %v", err, nil)
+	}
+	defer v.Release()
+	if got := v.Is(value); got != true {
+		t.Errorf("v.Is() got %v, want %v", got, true)
+	}
 }
 
 func TestObjectGet(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -110,20 +134,20 @@ func TestObjectGet(t *testing.T) {
 		t.Fatal()
 	}
 
-	propValue, err := object.Get("test")
+	v, err := object.Get("test")
 	if err != nil {
 		t.Errorf("o.Get() err = %v, want %v", err, nil)
 	}
-	defer propValue.Release()
-	if got := propValue.IsString(); got != true {
-		t.Errorf("propValue.IsString() got %v, want %v", got, true)
-	}
-	if got := propValue.String(); got != "test" {
-		t.Errorf("propValue.String() got %v, want %v", got, nil)
+	defer v.Release()
+	if got := v.Is(value); got != true {
+		t.Errorf("v.Is() got %v, want %v", got, true)
 	}
 }
 
 func TestObjectDelete(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -147,9 +171,15 @@ func TestObjectDelete(t *testing.T) {
 	if err := object.Delete("test"); err != nil {
 		t.Errorf("o.Delete() err = %v, want %v", err, nil)
 	}
+	if got := object.Has("test"); got != false {
+		t.Errorf("o.Has() got %v, want %v", got, false)
+	}
 }
 
 func TestObjectCall(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -202,6 +232,9 @@ func TestObjectCall(t *testing.T) {
 }
 
 func TestObjectCall_Error(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -240,6 +273,9 @@ func TestObjectCall_Error(t *testing.T) {
 }
 
 func TestObjectHasElement(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -265,6 +301,9 @@ func TestObjectHasElement(t *testing.T) {
 }
 
 func TestObjectSetElement(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -284,9 +323,15 @@ func TestObjectSetElement(t *testing.T) {
 	if err := object.SetElement(0, value); err != nil {
 		t.Errorf("o.SetElement() err = %v, want %v", err, nil)
 	}
+	if got := object.HasElement(0); got != true {
+		t.Errorf("o.HasElement() got %v, want %v", got, true)
+	}
 }
 
 func TestObjectGetElement(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -306,17 +351,20 @@ func TestObjectGetElement(t *testing.T) {
 		t.Fatal()
 	}
 
-	propValue, err := object.GetElement(0)
+	v, err := object.GetElement(0)
 	if err != nil {
 		t.Errorf("o.GetElement() err = %v, want %v", err, nil)
 	}
-	defer propValue.Release()
-	if !propValue.IsString() || propValue.String() != "test" {
-		t.Fatal()
+	defer v.Release()
+	if got := v.Is(value); got != true {
+		t.Errorf("v.Is() got %v, want %v", got, true)
 	}
 }
 
 func TestObjectDeleteElement(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -340,22 +388,28 @@ func TestObjectDeleteElement(t *testing.T) {
 	if err != nil {
 		t.Errorf("o.DeleteElement() err = %v, want %v", err, nil)
 	}
+	if got := object.HasElement(0); got != false {
+		t.Errorf("o.HasElement() got %v, want %v", got, false)
+	}
 }
 
 func TestObjectAsValue(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
 	}
 	defer ctx.Destroy()
-	v, err := gomonkey.NewObject(ctx)
+	object, err := gomonkey.NewObject(ctx)
 	if err != nil {
 		t.Fatal()
 	}
-	defer v.Release()
+	defer object.Release()
 
-	val := v.AsValue()
-	if val == nil {
-		t.Errorf("o.AsValue() = %v", val)
+	v := object.AsValue()
+	if v == nil {
+		t.Errorf("o.AsValue() = %v", v)
 	}
 }

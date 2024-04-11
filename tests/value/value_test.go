@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"runtime"
 	"testing"
 
 	"github.com/bhuisgen/gomonkey"
@@ -17,6 +18,9 @@ func TestMain(m *testing.M) {
 }
 
 func TestNewValueNull(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -34,6 +38,9 @@ func TestNewValueNull(t *testing.T) {
 }
 
 func TestNewValueUndefined(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -51,6 +58,9 @@ func TestNewValueUndefined(t *testing.T) {
 }
 
 func TestNewValueString(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -71,6 +81,9 @@ func TestNewValueString(t *testing.T) {
 }
 
 func TestNewValueBoolean(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -91,6 +104,9 @@ func TestNewValueBoolean(t *testing.T) {
 }
 
 func TestNewValueNumber(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -111,6 +127,9 @@ func TestNewValueNumber(t *testing.T) {
 }
 
 func TestNewValueInt32(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -131,6 +150,9 @@ func TestNewValueInt32(t *testing.T) {
 }
 
 func TestValueRelease(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -145,6 +167,9 @@ func TestValueRelease(t *testing.T) {
 }
 
 func TestValueString(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -162,6 +187,9 @@ func TestValueString(t *testing.T) {
 }
 
 func TestValueFormat(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -222,6 +250,9 @@ func TestValueMarshalJSON(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			runtime.LockOSThread()
+			defer runtime.UnlockOSThread()
+
 			ctx, err := gomonkey.NewContext()
 			if err != nil {
 				t.Fatal()
@@ -244,6 +275,9 @@ func TestValueMarshalJSON(t *testing.T) {
 }
 
 func TestValueAsValue(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -262,6 +296,9 @@ func TestValueAsValue(t *testing.T) {
 }
 
 func TestValueAsObject(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -287,6 +324,9 @@ func TestValueAsObject(t *testing.T) {
 }
 
 func TestValueAsFunction(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -314,6 +354,9 @@ func TestValueAsFunction(t *testing.T) {
 }
 
 func TestValueIs(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -331,6 +374,9 @@ func TestValueIs(t *testing.T) {
 }
 
 func TestValueIsUndefined(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -348,6 +394,9 @@ func TestValueIsUndefined(t *testing.T) {
 }
 
 func TestValueIsNull(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -365,6 +414,9 @@ func TestValueIsNull(t *testing.T) {
 }
 
 func TestValueIsNullOrUndefined(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -390,6 +442,9 @@ func TestValueIsNullOrUndefined(t *testing.T) {
 }
 
 func TestValueIsTrue(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -407,6 +462,9 @@ func TestValueIsTrue(t *testing.T) {
 }
 
 func TestValueIsFalse(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -424,6 +482,9 @@ func TestValueIsFalse(t *testing.T) {
 }
 
 func TestValueIsString(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -441,6 +502,9 @@ func TestValueIsString(t *testing.T) {
 }
 
 func TestValueIsBoolean(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -458,6 +522,9 @@ func TestValueIsBoolean(t *testing.T) {
 }
 
 func TestValueIsNumber(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -475,6 +542,9 @@ func TestValueIsNumber(t *testing.T) {
 }
 
 func TestValueIsInt32(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -492,6 +562,9 @@ func TestValueIsInt32(t *testing.T) {
 }
 
 func TestValueToString(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -509,6 +582,9 @@ func TestValueToString(t *testing.T) {
 }
 
 func TestValueToBoolean(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -534,6 +610,9 @@ func TestValueToBoolean(t *testing.T) {
 }
 
 func TestValueToNumber(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -551,6 +630,9 @@ func TestValueToNumber(t *testing.T) {
 }
 
 func TestValueToInt32(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()

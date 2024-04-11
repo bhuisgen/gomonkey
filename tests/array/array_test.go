@@ -2,6 +2,7 @@ package gomonkey_test_array
 
 import (
 	"os"
+	"runtime"
 	"testing"
 
 	"github.com/bhuisgen/gomonkey"
@@ -15,6 +16,9 @@ func TestMain(m *testing.M) {
 }
 
 func TestNewArrayObject(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -29,6 +33,9 @@ func TestNewArrayObject(t *testing.T) {
 }
 
 func TestArrayObjectRelease(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -43,6 +50,9 @@ func TestArrayObjectRelease(t *testing.T) {
 }
 
 func TestArrayObjectLength(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -60,6 +70,9 @@ func TestArrayObjectLength(t *testing.T) {
 }
 
 func TestArrayObjectAsValue(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
@@ -78,6 +91,9 @@ func TestArrayObjectAsValue(t *testing.T) {
 }
 
 func TestArrayObjectAsObject(t *testing.T) {
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	ctx, err := gomonkey.NewContext()
 	if err != nil {
 		t.Fatal()
