@@ -1,9 +1,0 @@
---- build/moz.configure/pkg.configure.orig	2024-04-09 14:05:30
-+++ build/moz.configure/pkg.configure	2024-04-09 14:05:50
-@@ -16,7 +16,7 @@
-     bootstrap=depends(when=target_sysroot.bootstrapped)(lambda: "pkgconf"),
-     allow_missing=True,
-     when=compile_environment
--    & depends(target.os)(lambda os: os not in ("WINNT", "OSX", "Android")),
-+    & depends(target.os)(lambda os: os not in ("WINNT", "Android")),
- )

@@ -6,13 +6,14 @@
 
 Go bindings to Mozilla Javascript Engine [SpiderMonkey](https://spidermonkey.dev).
 
-| OS      | CPU   | Version    |
-|---------|-------|------------|
-| Darwin  | arm64 | macOS 14   |
-| FreeBSD | amd64 | FreeBSD 14 |
-| Linux   | amd64 | Debian 12  |
-| NetBSD  | amd64 | NetBSD 9   |
-| OpenBSD | amd64 | OpenBSD 7  |
+| OS      | CPU   | Version     |
+|---------|-------|-------------|
+| Darwin  | arm64 | macOS 14    |
+| FreeBSD | amd64 | FreeBSD 14  |
+| Linux   | amd64 | Alpine 3.19 |
+| Linux   | amd64 | Debian 12   |
+| NetBSD  | amd64 | NetBSD 9    |
+| OpenBSD | amd64 | OpenBSD 7   |
 
 ## Usage
 
@@ -492,11 +493,17 @@ Copy the library in your system library path:
 
 To troubleshoot any missing system libraries, use the `ldd` command.
 
-**Linux:**
+**Linux (glibc):**
 
 Copy the library in your system library path:
 
     $ sudo cp deps/lib/linux_amd64/release/lib/libmozjs-115.so /usr/lib/x86_64-linux-gnu/
+
+**Linux (musl):**
+
+Copy the library in your system library path:
+
+    $ sudo cp deps/lib/linux_amd64_musl/release/lib/libmozjs-115.so /usr/lib/
 
 To troubleshoot any missing system libraries, use the `ldd` command.
 

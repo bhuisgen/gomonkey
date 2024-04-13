@@ -1,0 +1,19 @@
+--- build/moz.configure/rust.configure.orig
++++ build/moz.configure/rust.configure
+@@ -280,6 +280,7 @@
+     return data
+
+
++@imports("os")
+ def detect_rustc_target(
+     host_or_target, compiler_info, arm_target, rust_supported_targets
+ ):
+@@ -411,7 +412,7 @@
+
+         return None
+
+-    rustc_target = find_candidate(candidates)
++    rustc_target = os.environ["RUST_TARGET"]
+
+     if rustc_target is None:
+         die("Don't know how to translate {} for rustc".format(host_or_target.alias))

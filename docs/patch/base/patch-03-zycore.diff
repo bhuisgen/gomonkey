@@ -1,0 +1,11 @@
+--- js/src/zydis/Zycore/Defines.h       2024-03-10 20:51:04.475925623 +0000
++++ js/src/zydis/Zycore/Defines.h       2024-03-10 20:51:16.722303305 +0000
+@@ -100,7 +100,7 @@
+ #elif defined(sun) || defined(__sun)
+ #   define ZYAN_SOLARIS
+ #   define ZYAN_POSIX
+-#elif defined(__unix)
++#elif defined(__unix) || defined(__unix__)
+ #   define ZYAN_UNIX
+ #   define ZYAN_POSIX
+ #elif defined(__posix)

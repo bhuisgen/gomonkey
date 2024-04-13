@@ -40,10 +40,10 @@ $ tar xf firefox-115.9.1.tar.xz
 $ cd firefox-115.9.1
 ```
 
-First apply all patches present in the **patch** directory if any:
+First apply the patches present in the **patch** directory depending of the required OS and architecture:
 
 ```bash
-$ cp ~/gomonkey/patch/* .
+$ cp ~/gomonkey/docs/patch/base/* .
 $ for i in *.diff; do patch -p0 < $i; done
 ```
 
